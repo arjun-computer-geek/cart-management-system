@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
 import { Route, Routes } from 'react-router-dom';
 import Cart from './Cart'
-import Product from './Products'
+import Product from './Product'
 
 const App = () => {
 

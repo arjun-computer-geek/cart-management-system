@@ -2,27 +2,41 @@ import { createContext, useContext, useEffect, useState } from "react";
 const CartContext = createContext();
 
 
-
 const CartProvider = ({children}) =>{
     const [count, setCount] = useState(0);
     const [cart, setCart] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
 
+    const CalculateTotal = ()=> {
+        let total = 0;
+        cart.map(item=> {
+            total = (total + item.price) * item.qty;
+            return total
+        })
+        setTotalPrice(total)
+    }
+
     useEffect(()=> {
         CalculateTotal()
     },
-    [cart])
+    [cart, CalculateTotal])
 
     
     const addToCart = (product)=> {
-        setCart((item)=> [...item, product])
+        
+        if(!cart.find(ele => ele.id === product.id))
+        setCart((item)=> [...item, {...product, qty: 1}])
+        else {
+            cart.map((item, i) => {
+                if(item.id === product.id){
+                    cart[i].qty +=1;
+                }
+            })
+        }
+        
     }
 
-    const CalculateTotal = ()=> {
-        let total = 0;
-        cart.map(item=> total+=item.price)
-        setTotalPrice(total)
-    }
+    
 
     const cartValue = {
         productCount: count,
